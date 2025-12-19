@@ -1,0 +1,12 @@
+﻿<p>
+    @server.Name, @server.IsOnline
+</p>
+
+
+@code {
+    private Server server = new Server
+    {
+        Name = "Server-" + Random.Shared.Next(1, 11),
+        
+    };
+}
