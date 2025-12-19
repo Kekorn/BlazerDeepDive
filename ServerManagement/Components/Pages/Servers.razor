@@ -3,9 +3,46 @@
 <h3>Servers</h3>
 <br />
 <br />
-<ServerComponent /> 
+<div class="container-fluid text-center">
+    <div class="row w-100">
+        @foreach (string city in cities)
+        {
+            <div class="col">
+                <button type="button" class="btn btn-primary">@city </button>
+                <text>&nbsp;</text>
+            </div>
+        }
+    </div>
+</div>
 <br />
-<ServerComponent />
-@code {
+<select>
+    @foreach (string city in cities)
+    {
+        <option value="@city">@city</option>
+    }
+</select>
+<br />
+<br />
+<ul style="padding-left:0em">
+    @foreach (Server server in servers)
+    {
+        <li style="list-style:none">
+            @server.Name - @server.City:
+            <span style="color:@(server.IsOnline ? "green" : "red")">@server.GetStatus() </span>
+        </li>
+    }
+</ul>
 
+<ul style="padding-left:0em">
+    @foreach (string city in cities)
+    {
+        <li style="list-style:none">
+            @city
+        </li>
+    }
+</ul>
+
+@code {
+    private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
+    private List<string> cities = CitiesRepistory.GetCities();
 }
