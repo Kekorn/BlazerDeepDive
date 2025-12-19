@@ -1,6 +1,6 @@
-﻿<p>
-    @server.Name, @server.IsOnline
-</p>
+﻿<div data-name="@server.Name" data-status="@(server.IsOnline ? "online" : "offline")" style=" color:@(server.IsOnline ? "green" : "red")">
+    @server.Name, @server.IsOnline, @(server.IsOnline ? "online": "offline" )
+</div>
 
 
 @code {
