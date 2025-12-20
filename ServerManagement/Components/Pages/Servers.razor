@@ -1,5 +1,7 @@
 ﻿@page "/servers"
 
+@inject NavigationManager? NavigationManager
+
 <h3>Servers</h3>
 <br />
 <br />
@@ -17,12 +19,16 @@
     </div>
 </div>
 <br />
+
+
 <select>
     @foreach (string city in cities)
     {
         <option value="@city">@city</option>
     }
 </select>
+
+
 <br />
 <br />
 <ul style="padding-left:0em">
@@ -33,21 +39,34 @@
             <span style="color:@(server.IsOnline ? "green" : "red")">@server.GetStatus() </span>
             &nbsp;
             <a href="/servers/@server.ServerId" class="btn btn-link">Edit</a>
+            &nbsp;
+
+            <EditForm Model="server"
+                      FormName="@($"form-server-{server.ServerId}")"
+                      OnValidSubmit="@(() => {DeleteServer(server.ServerId);})">
+                
+                <button class="btn btn-primary" type="submit">Delete</button>
+            </EditForm>
+
         </li>
     }
 </ul>
 
-<ul style="padding-left:0em">
-    @foreach (string city in cities)
-    {
-        <li style="list-style:none">
-            @city
-        </li>
-    }
-</ul>
+<p>
+    <a href="/servers/add" class="btn btn-primary">Add Server</a>
+</p>
 
 @code {
     // private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
     private List<Server> servers = ServersRepository.GetAllServers();
     private List<string> cities = CitiesRepistory.GetCities();
+
+    private void DeleteServer(int serverId)
+    {
+        if (serverId > 0)
+        {
+            ServersRepository.DeleteServer(serverId);
+            NavigationManager.NavigateTo("/servers", true);
+        }
+    }
 }

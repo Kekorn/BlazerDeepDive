@@ -1,11 +1,16 @@
 ﻿@page "/servers/{id:int}"
+
+@inject NavigationManager? NavigationManager
+
 <h3>Edit Server</h3>
 <br />
 <br />
 
 @if (server != null)
 {
-    <EditForm Model="server" FormName="formServer" OnSubmit="Submit">
+    <EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
+        <DataAnnotationsValidator></DataAnnotationsValidator>
+        @* <ValidationSummary></ValidationSummary> *@
 
         @* Rejtett mező a <ServerId> számára. A metódusnak át kell adni az objektumpéldány azonosítóját *@
         <InputNumber @bind-Value="server.ServerId" class="form-control" hidden></InputNumber>
@@ -15,16 +20,19 @@
                 <label class="col-form-label">Server Id:</label>
             </div>
             <div class="col-6">
-                <InputNumber @bind-Value="server.ServerId" class="form-control" disabled ></InputNumber>
-            </div>
+                <InputNumber @bind-Value="server.ServerId" class="form-control" disabled></InputNumber>
+            </div>            
         </div>
-        
+
         <div class="row mb-3">
             <div class="col-2">
                 <label class="col-form-label">Name:</label>
             </div>
             <div class="col-6">
                 <InputText @bind-Value="server.Name" class="form-control" />
+            </div>
+            <div class="col">
+                <ValidationMessage For="@(() => server.Name)" />
             </div>
         </div>
 
@@ -34,6 +42,9 @@
             </div>
             <div class="col-6">
                 <InputText @bind-Value="server.City" class="form-control" />
+            </div>
+            <div class="col">
+                <ValidationMessage For="@(() => server.City)" />
             </div>
         </div>
 
@@ -47,19 +58,20 @@
         </div>
         <button class="btn btn-primary" type="submit">Update</button>
         <a href="/servers" class="btn btn-primary">Close</a>
+
     </EditForm>
 }
 
 
 @code {
 
-    // Az Id paraméter segítségével kapjuk meg a szerver azonosítóját az URL-ből. Elmentjük 
-    // egy publikus tulajdonságba, hogy a Blazor tudja kötni az útvonal paramétert ehhez a 
+    // Az Id paraméter segítségével kapjuk meg a szerver azonosítóját az URL-ből. Elmentjük
+    // egy publikus tulajdonságba, hogy a Blazor tudja kötni az útvonal paramétert ehhez a
     // tulajdonsághoz
 
     [Parameter]
     public int Id { get; set; }
-    
+
     // Ha több űrlapot használunk, akkor a FormName paraméterrel megadhatjuk, hogy melyik űrlap adatait szeretnénk betölteni
     // [SupplyParameterFromForm(FormName = "formServer")]
     // Ha csak egy űrlap van, akkor a FormName paraméter elhagyható
@@ -70,16 +82,19 @@
 
     protected override void OnParametersSet()
     {
-        // Paraméter érkezésekor végrehajtandó műveletek 
-        // A ?? operátor segítségével csak akkor töltjük be a szerver adatait, ha a server változó még null értékű
-        // Így elkerüljük, hogy felülírjuk a felhasználó által már módosított adatokat
-
-        // A server változóba betöltjük az URL-ből kapott Id alapján a megfelelő szerver adatait
         server ??= ServersRepository.GetServerById(this.Id);
     }
+
+    // [Inject]
+    // private NavigationManager? NavigationManager { get; set; }
+
     private void Submit()
     {
         // Az űrlap elküldésekor végrehajtandó műveletek
-        ServersRepository.UpdateServer(server.ServerId, server);
+        if (server != null)
+        {
+            ServersRepository.UpdateServer(server.ServerId, server);
+            NavigationManager?.NavigateTo("/servers");
+        }
     }
 }

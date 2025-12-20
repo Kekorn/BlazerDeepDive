@@ -1,0 +1,71 @@
+﻿@page "/servers/add"
+
+@inject NavigationManager? NavigationManager
+
+<h3>AddServer</h3>
+
+
+<EditForm Model="server" FormName="formServer" OnValidSubmit="Submit">
+    <DataAnnotationsValidator></DataAnnotationsValidator>
+     
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label">Name:</label>
+        </div>
+        <div class="col-6">
+            <InputText @bind-Value="server.Name" class="form-control" />
+        </div>
+        <div class="col">
+            <ValidationMessage For="@(() => server.Name)" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <label class="col-form-label">City:</label>
+        </div>
+        <div class="col-6">
+            <InputText @bind-Value="server.City" class="form-control" />
+        </div>
+        <div class="col">
+            <ValidationMessage For="@(() => server.City)" />
+        </div>
+    </div>
+
+    <div class="row mb-3">
+        <div class="col-2">
+            <label for="IsOnline" class="col-form-label">Online:</label>
+        </div>
+        <div class="col-6">
+            <InputCheckbox id="IsOnline" @bind-Value="server.IsOnline" class="form-check-input" />
+        </div>
+    </div>
+    <button class="btn btn-primary" type="submit">Save</button>
+    <a href="/servers" class="btn btn-primary">Close</a>
+
+</EditForm>
+
+
+
+@code {
+
+
+    // Ha több űrlapot használunk, akkor a FormName paraméterrel megadhatjuk, hogy melyik űrlap adatait szeretnénk betölteni
+    // [SupplyParameterFromForm(FormName = "formServer")]
+    // Ha csak egy űrlap van, akkor a FormName paraméter elhagyható
+    [SupplyParameterFromForm]
+    // Létrehozunk egy server példányt, amelyet az űrlapon kitöltött adatokkal töltünk fel.
+    // A példányosításkor az IsOnline tulajdonságot alapértelmezés szerint hamisra állítjuk, 
+    // mivel egy új szerver állapota még kikapcsolt.
+    private Server? server { get; set; } = new Server() { IsOnline = false };
+
+    private void Submit()
+    {
+        // Az űrlap elküldésekor végrehajtandó műveletek
+        if (server != null)
+        {
+            ServersRepository.AddServer(server);
+            NavigationManager?.NavigateTo("/servers");
+        }
+    }
+}
