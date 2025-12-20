@@ -7,9 +7,11 @@
     <div class="row w-100">
         @foreach (string city in cities)
         {
-            <div class="col">
-                <button type="button" class="btn btn-primary">@city </button>
-                <text>&nbsp;</text>
+            <div class="card" style="width: 8rem;padding-top:0.8rem">
+                <img class="card-img-top" src="@($"/images/{city}.png")" alt="Card image cap">
+                <div class="card-body">
+                    <button type="button" class="btn btn-primary">@city </button>
+                </div>
             </div>
         }
     </div>
@@ -29,6 +31,8 @@
         <li style="list-style:none">
             @server.Name - @server.City:
             <span style="color:@(server.IsOnline ? "green" : "red")">@server.GetStatus() </span>
+            &nbsp;
+            <a href="/servers/@server.ServerId" class="btn btn-link">Edit</a>
         </li>
     }
 </ul>
@@ -43,6 +47,7 @@
 </ul>
 
 @code {
-    private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
+    // private List<Server> servers = ServersRepository.GetServersByCity("Toronto");
+    private List<Server> servers = ServersRepository.GetAllServers();
     private List<string> cities = CitiesRepistory.GetCities();
 }
