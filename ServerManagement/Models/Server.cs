@@ -1,4 +1,4 @@
-﻿using System.Diagnostics;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace ServerManagement.Models
 {
@@ -12,7 +12,9 @@ namespace ServerManagement.Models
         //}
         public int ServerId { get; set; }
         public bool IsOnline { get; set; } = (new Random().Next(0, 2)) == 0 ? false : true;
+        [Required]
         public string? Name { get; set; }
+        [Required]
         public string? City { get; set; }
 
         public string GetStatus()

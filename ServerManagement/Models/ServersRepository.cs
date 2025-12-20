@@ -53,6 +53,20 @@
             }
             return null;
         }
+
+        public static void UpdateServer(int serverId, Server server)
+        {
+            if (serverId != server.ServerId) return;
+
+            var serverToUpdate = servers.FirstOrDefault(s => s.ServerId == serverId);
+            if (serverToUpdate != null)
+            {
+                serverToUpdate.Name = server.Name;
+                serverToUpdate.City = server.City;
+                serverToUpdate.IsOnline = server.IsOnline;
+            }
+        }
+
         public static void UpdateServerStatus(int serverId, Server server)
         {
             if (serverId != server.ServerId) return;
@@ -60,9 +74,9 @@
             var serverToUpdate = servers.FirstOrDefault(s => s.ServerId == serverId);
             if (serverToUpdate != null)
             {
-                serverToUpdate.IsOnline = server.IsOnline;
                 serverToUpdate.Name = server.Name;
                 serverToUpdate.City = server.City;
+                serverToUpdate.IsOnline = server.IsOnline;
             }
         }
         public static void DeleteServer(int serverId)
