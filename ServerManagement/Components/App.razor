@@ -13,7 +13,11 @@
 </head>
 
 <body>
-    <Routes />
+    @* A gyökérkomponensben megadott paraméterek globálisak. Esetünkben a renderelés 
+    beállítása minden gyermek komponensre érvényes lesz és nem felülírható. Ez az egyik
+    ajánlott beállítás és a komonens meghívásakori beállítás, mert az öröklődés így 
+    követhető marad.*@
+    <Routes @rendermode="InteractiveServer"/>
     <script src="_framework/blazor.web.js"></script>
 </body>
 

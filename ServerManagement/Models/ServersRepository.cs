@@ -21,6 +21,10 @@
             new Server { ServerId = 15, Name = "Server 15", City = "Halifax" }
         };
 
+        private static bool Status()
+        {
+            return (new Random().Next(0, 2)) == 0 ? false : true;
+        }
         public static void AddServer(Server server)
         {
             var maxId = servers.Max(s => s.ServerId);
@@ -48,7 +52,8 @@
                     ServerId = server.ServerId,
                     Name = server.Name,
                     City = server.City,
-                    IsOnline = (new Random().Next(0, 2)) == 0 ? false : true
+                    //IsOnline = (new Random().Next(0, 2)) == 0 ? false : true
+                    IsOnline = server.IsOnline
                 };
             }
             return null;
@@ -66,19 +71,7 @@
                 serverToUpdate.IsOnline = server.IsOnline;
             }
         }
-
-        public static void UpdateServerStatus(int serverId, Server server)
-        {
-            if (serverId != server.ServerId) return;
-
-            var serverToUpdate = servers.FirstOrDefault(s => s.ServerId == serverId);
-            if (serverToUpdate != null)
-            {
-                serverToUpdate.Name = server.Name;
-                serverToUpdate.City = server.City;
-                serverToUpdate.IsOnline = server.IsOnline;
-            }
-        }
+        
         public static void DeleteServer(int serverId)
         {
             var server = servers.FirstOrDefault(s => s.ServerId == serverId);
@@ -90,6 +83,16 @@
         public static List<Server> SearchServers(string serverFilter)
         {
             return servers.Where(s => s.Name != null && s.Name.Contains(serverFilter, StringComparison.OrdinalIgnoreCase)).ToList();
+        }
+
+        public static int GetServersMinId()
+        {
+            return servers.Min(s => s.ServerId);
+        }
+
+        public static int GetServersMaxId()
+        {
+            return servers.Max(s => s.ServerId);
         }
     }
 }

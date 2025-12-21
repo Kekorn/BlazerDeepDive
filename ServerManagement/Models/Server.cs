@@ -10,6 +10,7 @@ namespace ServerManagement.Models
         //    int randomNumber = random.Next(0, 2);
         //    IsOnline = randomNumber == 0 ? false : true;
         //}
+
         public int ServerId { get; set; }
         public bool IsOnline { get; set; } = (new Random().Next(0, 2)) == 0 ? false : true;
         [Required]

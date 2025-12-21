@@ -1,24 +1,47 @@
 ﻿@page "/servers"
+@* Az interaktív renderelés beállítása lehetséges a szülő komponensnél lap szintjén, 
+    ekkor a beállítás érvényes lesz a gyermek komponensekre is. (Nem ajánlott, mert nehezen 
+    követhető az öröklés.)*@
+@rendermode InteractiveServer
 
 @inject NavigationManager? NavigationManager
 
 <h3>Servers</h3>
 <br />
 <br />
+
 <div class="container-fluid text-center">
     <div class="row w-100">
         @foreach (string city in cities)
         {
             <div class="card" style="width: 8rem;padding-top:0.8rem">
-                <img class="card-img-top" src="@($"/images/{city}.png")" alt="Card image cap">
+                <img class="card-img-top" src="@($"/images/{city}.png")" style="height:6.4rem" alt="Card image cap">
                 <div class="card-body">
-                    <button type="button" class="btn btn-primary">@city </button>
+                    <button type="button" class="btn btn-primary" @onclick="() => OnFilterCity(city)">@city </button>
                 </div>
             </div>
         }
+        <div class="card" style="width: 8rem;padding-top:0.8rem">            
+            <img class="card-img-top" src="/images/AllServer.jpg" style="height:6.4rem" alt="All servers">            
+            <div class="card-body">
+                <button type="button" class="btn btn-primary" @onclick="() => OnFilterCity(null)">All </button>
+            </div>
+        </div>
     </div>
 </div>
 <br />
+
+
+@if (servers.Count != 0)
+{
+    <p>
+        <ServerComponent></ServerComponent>
+    </p>
+    @* Az interaktívitás beállítása a komponens hívásakor is lehetséges. Ekkor csak 
+    az adott komponensre érvényes a beállítás. Ez az egyik ajánlott beállítás és a 
+    gyökér komonens meghívásakori (globális) beállítás, mert az öröklődés így követhető marad.*@
+    <ServerIntComponent @rendermode="InteractiveServer"></ServerIntComponent> 
+}
 
 
 <select>
@@ -34,20 +57,14 @@
 <ul style="padding-left:0em">
     @foreach (Server server in servers)
     {
-        <li style="list-style:none">
-            @server.Name - @server.City:
-            <span style="color:@(server.IsOnline ? "green" : "red")">@server.GetStatus() </span>
+        <li style="list-style:none; line-height:3rem">
+            <span style="min-width: 250px;display:inline-block">
+                @server.Name - @server.City:
+                <span style="color:@(server.IsOnline ? "green" : "red")">@server.GetStatus() </span>
+            </span>&nbsp;
+            <a href="/servers/@server.ServerId" class="btn btn-primary">Edit</a>
             &nbsp;
-            <a href="/servers/@server.ServerId" class="btn btn-link">Edit</a>
-            &nbsp;
-
-            <EditForm Model="server"
-                      FormName="@($"form-server-{server.ServerId}")"
-                      OnValidSubmit="@(() => {DeleteServer(server.ServerId);})">
-                
-                <button class="btn btn-primary" type="submit">Delete</button>
-            </EditForm>
-
+            <button class="btn btn-primary" type="button" @onclick="@(() => { DeleteServer(server.ServerId); })">Delete</button>
         </li>
     }
 </ul>
@@ -66,7 +83,21 @@
         if (serverId > 0)
         {
             ServersRepository.DeleteServer(serverId);
-            NavigationManager.NavigateTo("/servers", true);
+            NavigationManager?.NavigateTo("/servers");
+        }
+    }
+    private void OnFilterCity(string city)
+    {
+        string selectedCity = city?? string.Empty;
+        if (string.IsNullOrEmpty(selectedCity))
+        {
+            servers = ServersRepository.GetAllServers();
+            return;
+        }
+        else
+        {
+            servers = ServersRepository.GetServersByCity(selectedCity);
+            NavigationManager?.NavigateTo("/servers");
         }
     }
 }
