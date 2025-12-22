@@ -5,6 +5,8 @@ VisualStudioVersion = 17.14.36804.6
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServerManagement", "ServerManagement\ServerManagement.csproj", "{5AEDF0DD-CA3D-4865-8B16-122BDD8845F5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorGoogleAuth", "BlazorGoogleAuth\BlazorGoogleAuth.csproj", "{4643EE5F-CC05-47CA-98C0-2B790A4BCC08}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{5AEDF0DD-CA3D-4865-8B16-122BDD8845F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5AEDF0DD-CA3D-4865-8B16-122BDD8845F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5AEDF0DD-CA3D-4865-8B16-122BDD8845F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4643EE5F-CC05-47CA-98C0-2B790A4BCC08}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4643EE5F-CC05-47CA-98C0-2B790A4BCC08}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4643EE5F-CC05-47CA-98C0-2B790A4BCC08}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4643EE5F-CC05-47CA-98C0-2B790A4BCC08}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

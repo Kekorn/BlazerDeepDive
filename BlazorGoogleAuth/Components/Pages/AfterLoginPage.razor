@@ -1,0 +1,54 @@
+﻿@page "/after-login"
+@using System.Security.Claims
+@using Microsoft.AspNetCore.Authentication
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager NavManager
+@inject AppDbContext DbContext
+<h3>AfterLoginPage</h3>
+
+
+@code {
+    [CascadingParameter]
+    public HttpContext httpContext { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if(!httpContext.User.Identity!.IsAuthenticated)
+            return;
+
+        var name = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.Value;
+        var email = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value;
+
+        var getUser = await DbContext.GoogleUsers.FirstOrDefaultAsync(u => u.Email == email);
+        if (getUser == null)
+        {
+            var users = await DbContext.GoogleUsers.ToListAsync();
+            int count = users != null ? users.Count : 0;
+            var user = new AppUser
+            {
+                Name = name,
+                Email = email
+            };
+            if(count == 0)            
+                user.Role = "Admin";            
+            else
+                user.Role = "User";
+
+            DbContext.GoogleUsers.Add(user);
+            await DbContext.SaveChangesAsync();
+
+            var _user = DbContext.GoogleUsers.FirstOrDefault(u => u.Email == email);
+
+            Claim[] claims = [
+                new Claim(ClaimTypes.NameIdentifier, _user!.Id.ToString()),
+                new Claim(ClaimTypes.GivenName, _user.Name),
+                new Claim(ClaimTypes.Email, _user.Email),
+                new Claim(ClaimTypes.Role, _user.Role)
+            ];
+            var identity = new ClaimsIdentity(claims);
+            var prin = new ClaimsPrincipal(identity);
+            await httpContext.SignInAsync(AppConstants.AuthScheme, prin);
+            NavManager.NavigateTo("/");
+        }
+    }
+}
