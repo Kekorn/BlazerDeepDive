@@ -7,7 +7,7 @@
     <div data-name="@server.Name"
          data-status="@(server.IsOnline ? "online" : "offline")"
          style=" color:@(server.IsOnline ? "green" : "red")">
-        @server.Name, @server.IsOnline, @(server.IsOnline ? "online" : "offline")
+        <span style="min-width:250px;display:inline-block">@server.Name, @server.City, @(server.IsOnline ? "online" : "offline")</span>
         &nbsp;
         <button class="btn btn-primary" type="button" @onclick="()=>ChangeServerStatus()">Turn On/Off</button>
     </div>
