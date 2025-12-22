@@ -12,7 +12,8 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 // Add DbContext with SQLite
-builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlite("DefaultConnection"));
+var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<AppDbContext>(option => option.UseSqlite(connString));
 
 builder.Services.AddCascadingAuthenticationState();
 builder.Services.AddScoped<AuthenticationStateProvider, ServerAuthenticationStateProvider>();

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlazorGoogleAuth.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251222213307_First")]
+    [Migration("20251222233728_First")]
     partial class First
     {
         /// <inheritdoc />
