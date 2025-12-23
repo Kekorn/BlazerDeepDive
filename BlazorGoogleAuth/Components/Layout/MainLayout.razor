@@ -7,22 +7,39 @@
 
     <main>
         <div class="top-row px-4">
-            <div class="link">
+            @* <div class="link">
                 <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
-            </div>
-            <div class="profile">
+            </div> *@
+            <div class="profile d-flex align-items-center justify-content-end">
                 <AuthorizeView>
                     <Authorized>
-                        @{
-                            @context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value
-                            var picture = context.User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
-                            var name = context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.GivenName)?.Value;
-                        }
-                        @if (!string.IsNullOrEmpty(picture))
-                        {
-                            <img src="@picture" alt="@name" class="profile-picture" />
-                        }
+                        <div class="profile-text">
+                            <p class="text-end m-auto">
+                                @context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value
+                                <br />
+                                <a href="logout">Logout</a>
+                            </p>
+                        </div>
+                        <div class="profile-pic ">
+                            <a href="user-profile" class="align-middle">
+                            @{
+                                var picture = context.User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
+                            }
+                            @if (!string.IsNullOrEmpty(picture))
+                            {
+                                var name = context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value;
+                                <img src="@picture" alt="@name" class="profile-picture" />
+                            }
+                            </a>
+                        </div>
                     </Authorized>
+                    <NotAuthorized>
+                        <div class="profile-text">
+                            <p class="text-end m-auto">
+                                <a href="login">Login</a>
+                            </p>
+                        </div>
+                    </NotAuthorized>
                 </AuthorizeView>
             </div>
 
