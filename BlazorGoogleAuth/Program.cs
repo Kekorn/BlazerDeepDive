@@ -26,8 +26,8 @@ builder.Services.AddAuthentication(AppConstants.AuthScheme)
     })
     .AddGoogle(GoogleDefaults.AuthenticationScheme, googleOptions =>
     {
-        googleOptions.ClientId = "286893924388-cb7c56vb1aj7krh13ev35qg5419uhepm.apps.googleusercontent.com";
-        googleOptions.ClientSecret = "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";
+        googleOptions.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+        googleOptions.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
         googleOptions.AccessDeniedPath = "/access-denied";
         googleOptions.SignInScheme = AppConstants.AuthScheme;
         googleOptions.Scope.Add("profile");
