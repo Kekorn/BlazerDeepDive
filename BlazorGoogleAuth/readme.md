@@ -54,7 +54,8 @@ Google kezeli. Ezt követõen regisztráljuk a DB Contextet a Program.cs fájlban .
 
 Google Cloud Console beállítása: Ez a szakasz kritikus a mûködéshez. A videó bemutatja, 
 hogyan kell projektet létrehozni a Google Cloud felületén, konfigurálni az OAuth beleegyezõ 
-képernyõt, és legenerálni a kliensazonosítót (Client ID) és a titkos kulcsot (Client Secret). Fontos a visszahívási URL pontos megadása az alkalmazásunk portja alapján [09:45].
+képernyõt, és legenerálni a kliensazonosítót (Client ID) és a titkos kulcsot (Client Secret). 
+Fontos a visszahívási URL pontos megadása az alkalmazásunk portja alapján.
 
 Backend konfiguráció: A megszerzett kulcsokat a Program.cs fájlban rögzítjük, ahol 
 beállítjuk a Cookie-alapú hitelesítést és a Google szolgáltatásait .

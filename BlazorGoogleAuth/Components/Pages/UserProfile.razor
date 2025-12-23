@@ -3,30 +3,24 @@
 @attribute [Authorize]
 
 <h3>User Profile</h3>
-
+<br />
 <AuthorizeView Roles="Admin">
-    <h3>You are logged in as an Admin.</h3>
+    <h5>You are logged in as an Admin.</h5>
 </AuthorizeView>
 
 <AuthorizeView Roles="User">
-    <h3>You are logged in as an User.</h3>
+    <h5>You are logged in as a User.</h5>
 </AuthorizeView>
-
+<br/>
 <AuthorizeView>
-    <Authorized>
-        <h1>
-            You are authenticated
-        </h1>
-        <ul>
+    <Authorized>        
+        <ul style="list-style:none; padding: 0px">
             <li>ID: @context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)?.Value</li>
             <li>Name: @context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value</li>
             <li>Email: @context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)?.Value</li>
             <li>Role: @context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value</li>
         </ul>
-    </Authorized>
-    <NotAuthorized>
-        <h3>You are not logged in.</h3>
-    </NotAuthorized>
+    </Authorized>    
 </AuthorizeView>
 
 @code {
