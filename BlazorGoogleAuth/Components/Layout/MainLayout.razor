@@ -7,7 +7,25 @@
 
     <main>
         <div class="top-row px-4">
-            <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            <div class="link">
+                <a href="https://learn.microsoft.com/aspnet/core/" target="_blank">About</a>
+            </div>
+            <div class="profile">
+                <AuthorizeView>
+                    <Authorized>
+                        @{
+                            @context.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.GivenName)?.Value
+                            var picture = context.User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
+                            var name = context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.GivenName)?.Value;
+                        }
+                        @if (!string.IsNullOrEmpty(picture))
+                        {
+                            <img src="@picture" alt="@name" class="profile-picture" />
+                        }
+                    </Authorized>
+                </AuthorizeView>
+            </div>
+
         </div>
 
         <article class="content px-4">

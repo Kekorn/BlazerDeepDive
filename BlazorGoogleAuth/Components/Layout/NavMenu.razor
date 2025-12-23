@@ -1,17 +1,7 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorGoogleAuth</a>
-        <AuthorizeView>
-            <Authorized>
-                @{ var picture = context.User.Claims.FirstOrDefault(c => c.Type == "picture")?.Value;
-                    var name = context.User.Claims.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.GivenName)?.Value;
-                }
-                @if (!string.IsNullOrEmpty(picture))
-                {
-                    <img src="@picture" alt="@name" class="profile-picture" />
-                }
-            </Authorized>
-        </AuthorizeView>
+       
     </div>
 </div>
 
