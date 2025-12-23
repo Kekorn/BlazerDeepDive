@@ -1,4 +1,4 @@
-﻿namespace BlazorGoogleAuth.Autentiction
+﻿namespace BlazorGoogleAuth.Autentication
 {
     public static class AppConstants
     {

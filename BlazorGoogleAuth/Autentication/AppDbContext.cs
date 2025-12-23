@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-namespace BlazorGoogleAuth.Autentiction
+namespace BlazorGoogleAuth.Autentication
 {
     public class AppDbContext: DbContext
     {

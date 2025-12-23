@@ -1,9 +1,11 @@
-using BlazorGoogleAuth.Autentiction;
+using BlazorGoogleAuth.Autentication;
 using BlazorGoogleAuth.Components;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Server;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,8 @@ builder.Services.AddAuthentication(AppConstants.AuthScheme)
         googleOptions.ClientSecret = "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";
         googleOptions.AccessDeniedPath = "/access-denied";
         googleOptions.SignInScheme = AppConstants.AuthScheme;
+        googleOptions.Scope.Add("profile");
+        googleOptions.Events.OnCreatingTicket = async context => { var picture = context.User.GetProperty("picture").GetString(); context.Identity.AddClaim(new Claim("picture", picture)); };
     });
 
 var app = builder.Build();

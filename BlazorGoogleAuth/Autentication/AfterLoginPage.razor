@@ -1,0 +1,63 @@
+﻿@page "/after-login"
+@using Microsoft.AspNetCore.Authentication
+@using System.Security.Claims
+@using Microsoft.EntityFrameworkCore
+@inject NavigationManager NavManager
+@inject AppDbContext dbContext
+<h3>AfterLoginPage</h3>
+
+@code {
+    [CascadingParameter]
+    public HttpContext httpContext { get; set; }
+
+    protected async override Task OnInitializedAsync()
+    {
+        if (!httpContext.User.Identity!.IsAuthenticated)
+            return;
+
+        var name = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Name)!.Value;
+        var email = httpContext.User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Email)!.Value;
+        var picture = httpContext.User.Claims.FirstOrDefault(c => c.Type == "urn:google:picture" || c.Type == "picture")?.Value;
+
+        var getUser = await dbContext.GoogleUsers.FirstOrDefaultAsync(u => u.Email == email);
+        if (getUser == null)
+        {
+            var users = await dbContext.GoogleUsers.ToListAsync();
+            int count = users != null ? users.Count : 0;
+            var user = new AppUser
+            {
+                Name = name,
+                Email = email,
+                ProfilePicture = picture
+            };
+            if (count == 0)
+                user.Role = "Admin";
+            else
+                user.Role = "User";
+
+            dbContext.GoogleUsers.Add(user);
+            await dbContext.SaveChangesAsync();            
+        }
+        else if (getUser.ProfilePicture != picture)
+        {
+            getUser.ProfilePicture = picture;
+            await dbContext.SaveChangesAsync();
+        }
+        
+        var _user = await dbContext.GoogleUsers.FirstOrDefaultAsync(u => u.Email == email);
+        var pictureUrl = await dbContext.GoogleUsers.FirstOrDefaultAsync(u => u.ProfilePicture == email);
+
+
+        Claim[] claims = [
+            new Claim(ClaimTypes.NameIdentifier, _user!.Id.ToString()),
+                new Claim(ClaimTypes.GivenName, _user.Name),
+                new Claim(ClaimTypes.Email, _user.Email),
+                new Claim(ClaimTypes.Role, _user.Role),
+                new Claim("picture", _user.ProfilePicture)
+        ];
+        var identity = new ClaimsIdentity(claims, AppConstants.AuthScheme);
+        var prin = new ClaimsPrincipal(identity);
+        await httpContext.SignInAsync(AppConstants.AuthScheme, prin);
+        NavManager.NavigateTo("/", forceLoad: true);
+    }
+}
